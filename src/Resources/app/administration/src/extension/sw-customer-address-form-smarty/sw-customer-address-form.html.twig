@@ -1,0 +1,34 @@
+{% block sw_customer_address_form_container %}
+    {% parent %}
+
+    <div class="sw-grid sw-grid--wrap">
+
+        <div class="sw-grid__item sw-grid__item--grow">
+            <sw-text-field
+                    v-model="address.customFields.smarty_latitude"
+                    label="Latitude"
+                    placeholder="47.64424"
+            ></sw-text-field>
+        </div>
+
+        <div class="sw-grid__item sw-grid__item--grow">
+            <sw-text-field
+                    v-model="address.customFields.smarty_longitude"
+                    label="Longitude"
+                    placeholder="-122.11894"
+            ></sw-text-field>
+        </div>
+
+        <div class="sw-grid__item sw-grid__item--grow">
+            <sw-button
+                    :isLoading="smartyIsApplying"
+                    variant="primary"
+                    class="mt-4"
+                    @click="onSmartyApplyCoords"
+            >
+                Apply coordinates
+            </sw-button>
+        </div>
+
+    </div>
+{% endblock %}

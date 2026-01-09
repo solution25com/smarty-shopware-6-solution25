@@ -1,0 +1,125 @@
+.smarty-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  
+    &.is-open {
+      display: flex;
+    }
+  }
+  
+  .smarty-modal {
+    background: #fff;
+    max-width: 700px;
+    width: 100%;
+    padding: 20px;
+    border-radius: 6px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+  
+  .smarty-modal-header h3 {
+    margin: 0 0 10px;
+  }
+  
+  .smarty-modal-body p {
+    margin: 0 0 12px;
+  }
+  
+  .smarty-modal-compare {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  
+  .smarty-modal-column {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  
+  .smarty-modal-subtitle {
+    margin: 0 0 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  
+  .smarty-original-address-box {
+    border: 1px solid #ddd;
+    background: #fafafa;
+    padding: 8px 10px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+  
+  .smarty-modal-suggestions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+  }
+  
+  .smarty-modal-suggestion {
+    padding: 8px 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    background: #f7f7f7;
+    text-align: left;
+    cursor: pointer;
+    width: 100%;
+  
+    &:hover {
+      background: #eee;
+    }
+  }
+  
+  .smarty-modal-footer {
+    text-align: right;
+    margin-top: 16px;
+  }
+  
+  @media (max-width: 600px) {
+    .smarty-modal {
+      margin: 0 10px;
+    }
+  
+    .smarty-modal-compare {
+      flex-direction: column;
+    }
+  }
+  
+  // ZIP + street dropdowns (you currently inline-style these too)
+  // Keep class styling here, and strip the JS styles if you want later.
+  .smarty-suggestions-wrapper,
+  .smarty-street-suggestions-wrapper {
+    position: relative;
+  }
+  
+  .smarty-suggestions-dropdown,
+  .smarty-street-suggestions-dropdown {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    z-index: 10000;
+    background: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-height: 220px;
+    overflow-y: auto;
+    font-size: 0.9rem;
+    display: none;
+  }
+  
+  .smarty-suggestion-item,
+  .smarty-street-suggestion-item {
+    padding: 6px 10px;
+    cursor: pointer;
+  
+    &:hover {
+      background: #f0f0f0;
+    }
+  }
+  

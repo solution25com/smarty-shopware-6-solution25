@@ -1,0 +1,58 @@
+<div class="sw-settings-smarty-form">
+    {# Sales channel card #}
+    <mt-card style="margin-top: 20px;" title="Sales channel">
+        <sw-sales-channel-switch
+                ref="salesChannelSwitch"
+                :sales-channel-id="salesChannelId"
+                label="Select sales channel"
+                @change-sales-channel-id="onSalesChannelChanged"
+        />
+    </mt-card>
+
+    {# Configuration card #}
+    <mt-card :isLoading="isLoading" title="Configuration">
+        <div class="grid grid-cols-1 gap-20">
+            <sw-text-field
+                    label="Auth ID"
+                    v-model:value="form['SmartyIntegration.config.authId']"
+                    :maxlength="256"
+                    placeholder="Your Smarty Auth ID"
+            />
+
+            <sw-text-field
+                    label="Auth Token"
+                    v-model:value="form['SmartyIntegration.config.authToken']"
+                    :maxlength="256"
+                    placeholder="Your Smarty Auth Token"
+            />
+
+            {# Sandbox + Live + Test button in one row #}
+            <div class="smarty-env-row">
+                <sw-switch-field
+                        class="smarty-env-row__switch"
+                        label="Sandbox environment"
+                        help-text="Enable this to use Smarty sandbox environment."
+                        v-model:value="form['SmartyIntegration.config.sandbox']"
+                />
+
+                <sw-switch-field
+                        class="smarty-env-row__switch"
+                        label="Live environment"
+                        help-text="Enable this to use Smarty live/production environment."
+                        v-model:value="form['SmartyIntegration.config.live']"
+                />
+
+                <div class="smarty-env-row__actions">
+                    <sw-button
+                            variant="primary"
+                            :isLoading="isTesting"
+                            @click="onClickTestConnection"
+                    >
+                        Test connection
+                    </sw-button>
+
+                </div>
+            </div>
+        </div>
+    </mt-card>
+</div>

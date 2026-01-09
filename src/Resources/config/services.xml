@@ -1,0 +1,96 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services
+                               https://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <defaults autowire="true" autoconfigure="true" public="false" />
+
+        <service id="SmartyIntegration\Config\SmartyConfig" />
+
+        <service id="SmartyIntegration\Service\SmartyApiService">
+            <argument type="service" id="SmartyIntegration\Config\SmartyConfig" />
+            <argument type="service" id="http_client" />
+            <argument type="service" id="SmartyIntegration.logger" />
+        </service>
+        <service id="SmartyIntegration\Service\SmartySuggestAddresses">
+            <argument type="service" id="SmartyIntegration\Config\SmartyConfig" />
+            <argument type="service" id="http_client" />
+            <argument type="service" id="SmartyIntegration.logger" />
+        </service>
+
+        <service id="SmartyIntegration\Storefront\Controller\SmartyTestConnectionController"
+                 public="true">
+            <argument type="service" id="SmartyIntegration\Service\SmartyApiService" />
+            <tag name="controller.service_arguments" />
+            <tag name="shopware.api.action" />
+        </service>
+        <service id="SmartyIntegration\Service\SmartyZipLookupService"/>
+
+        <service id="SmartyIntegration\Service\SmartyShippingAddressUpdater">
+            <argument type="service" id="customer_address.repository"/>
+            <argument type="service" id="country.repository"/>
+        </service>
+        <service id="SmartyIntegration\Storefront\Controller\SmartyAddressValidationController"
+                 public="true">
+                 <argument type="service" id="SmartyIntegration\Service\SmartyApiService" />
+                 <argument type="service" id="SmartyIntegration\Service\SmartyZipLookupService" />
+                 <argument type="service" id="SmartyIntegration\Service\SmartyShippingAddressUpdater" />
+                 <argument type="service" id="SmartyIntegration\Service\SmartySuggestAddresses" />
+                 <argument type="service" id="logger" />
+                 <tag name="controller.service_arguments" />
+        </service>
+
+        <service id="SmartyIntegration\Command\SmartyTestCommand">
+            <tag name="console.command" />
+        </service>
+
+        <service id="SmartyIntegration\SalesChannel\SmartyCustomerRegisterRoute"
+                 decorates="Shopware\Core\Checkout\Customer\SalesChannel\RegisterRoute">
+            <argument type="service"
+                      id="SmartyIntegration\SalesChannel\SmartyCustomerRegisterRoute.inner" />
+            <argument type="service"
+                      id="SmartyIntegration\Service\SmartyApiService" />
+            <argument type="service"
+                      id="SmartyIntegration.logger" />
+        </service>
+
+
+        <service id="SmartyIntegration\SalesChannel\SmartyUpsertAddressRoute"
+                 decorates="Shopware\Core\Checkout\Customer\SalesChannel\UpsertAddressRoute">
+            <argument type="service"
+                      id="SmartyIntegration\SalesChannel\SmartyUpsertAddressRoute.inner" />
+            <argument type="service"
+                      id="SmartyIntegration\Service\SmartyApiService" />
+        </service>
+
+        <service id="SmartyIntegration\Controller\SmartyAdminAddressController"
+                 public="true">
+            <argument type="service" id="SmartyIntegration\Service\SmartyApiService" />
+            <argument type="service" id="SmartyIntegration.logger" />
+            <tag name="controller.service_arguments" />
+        </service>
+
+        <service id="SmartyIntegration.fileHandler" class="Monolog\Handler\StreamHandler">
+            <argument type="string">%kernel.logs_dir%/SmartyIntegration.log</argument>
+        </service>
+
+        <service id="SmartyIntegration.logger" class="Monolog\Logger">
+            <argument type="string">SmartyIntegration</argument>
+            <argument type="collection">
+                <argument type="service" id="SmartyIntegration.fileHandler" />
+            </argument>
+        </service>
+
+
+
+        <service id="SmartyIntegration\Subscriber\SmartyCustomerAddressValidationSubscriber">
+            <argument type="service" id="SmartyIntegration\Service\SmartyApiService"/>
+            <argument type="service" id="country.repository"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+
+    </services>
+</container>

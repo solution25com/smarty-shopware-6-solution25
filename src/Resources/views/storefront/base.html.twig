@@ -1,0 +1,7 @@
+{% sw_extends '@Storefront/storefront/base.html.twig' %}
+
+{% block base_body_inner %}
+    {{ parent() }}
+
+    {% sw_include '@SmartyIntegration/storefront/component/smarty/suggestion-modal.html.twig' %}
+{% endblock %}

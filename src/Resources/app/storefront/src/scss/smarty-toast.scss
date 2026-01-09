@@ -1,0 +1,70 @@
+.smarty-toast-container {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+  }
+  
+  .smarty-toast {
+    pointer-events: auto;
+    width: min(420px, calc(100vw - 32px));
+    border-radius: 10px;
+    padding: 12px 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.18);
+    background: #fff;
+    border: 1px solid rgba(0,0,0,.08);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity .18s ease, transform .18s ease;
+  }
+  
+  .smarty-toast.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .smarty-toast.is-leaving {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  
+  .smarty-toast__title {
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 2px;
+  }
+  
+  .smarty-toast__message {
+    font-size: 0.92rem;
+    line-height: 1.2rem;
+  }
+  
+  .smarty-toast__close {
+    background: transparent;
+    border: 0;
+    font-size: 20px;
+    line-height: 20px;
+    padding: 2px 6px;
+    cursor: pointer;
+    opacity: .7;
+  
+    &:hover { opacity: 1; }
+  }
+  
+  .smarty-toast--error {
+    border-left: 4px solid #dc3545; // bootstrap danger-ish
+  }
+  
+  .smarty-toast--info {
+    border-left: 4px solid #0d6efd; // bootstrap primary-ish
+  }
+  

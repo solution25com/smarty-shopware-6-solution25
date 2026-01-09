@@ -1,0 +1,52 @@
+{% sw_extends '@Storefront/storefront/page/checkout/confirm/index.html.twig' %}
+
+{% block page_checkout_confirm_form_submit %}
+    {% set customer = context.customer ?? null %}
+    {% set shippingAddress = customer ? customer.activeShippingAddress : null %}
+    {% set updatedAt = shippingAddress ? shippingAddress.updatedAt.date : null %}
+    {% set addressTooOld = false %}
+
+    {% if updatedAt %}
+        {% set now = date() %}
+        {% set lastUpdate = date(updatedAt) %}
+        {% set diff = lastUpdate.diff(now) %}
+        {% set monthsSinceUpdate = diff.y * 12 + diff.m %}
+
+        {% if monthsSinceUpdate >= 6 %}
+            {% set addressTooOld = true %}
+        {% endif %}
+    {% endif %}
+
+    {% if shippingAddress %}
+        <input type="hidden"
+               id="smarty-confirm-street"
+               value="{{ shippingAddress.street|e('html_attr') }}">
+
+        <input type="hidden"
+               id="smarty-confirm-city"
+               value="{{ shippingAddress.city|e('html_attr') }}">
+
+        <input type="hidden"
+               id="smarty-confirm-zip"
+               value="{{ shippingAddress.zipcode|e('html_attr') }}">
+
+        <input type="hidden"
+               id="smarty-confirm-country"
+               value="{{ shippingAddress.country.iso|e('html_attr') }}">
+    {% endif %}
+
+    {% if addressTooOld %}
+        <div class="alert alert-warning checkout-address-reminder">
+            Your shipping address hasn’t been updated in the last 6 months.
+            We’ll verify it automatically before placing your order and update it if necessary.
+        </div>
+    {% endif %}
+
+    <div
+        data-smarty-checkout-confirm-validation
+        data-address-too-old="{{ addressTooOld ? '1' : '0' }}"
+    ></div>
+
+    {{ parent() }}
+
+{% endblock %}
