@@ -53,6 +53,12 @@ final class SmartySuggestAddresses
             'prefer_geolocation'  => 'city',
         ];
 
+        $postalCode = preg_replace('/\D+/', '', (string) $addressDto->getPostalCode()) ?? '';
+        if ($postalCode !== '') {
+            $query['include_only_zip_codes'] = substr($postalCode, 0, 5);
+            $query['prefer_geolocation'] = 'none';
+        }
+
         $options = [
             'query'   => $query,
             'timeout' => 5,
@@ -114,13 +120,19 @@ final class SmartySuggestAddresses
                 return [];
             }
 
+            $suggestions = $this->filterSuggestions($addressDto, $suggestions);
+
+            if (!$suggestions) {
+                return [];
+            }
+
             usort(
                 $suggestions,
                 fn(array $a, array $b) =>
                     $this->scoreSuggestion($addressDto, $b) <=> $this->scoreSuggestion($addressDto, $a)
             );
 
-            return [$suggestions[0]];
+            return array_slice($suggestions, 0, 10);
         } catch (\Throwable $e) {
             $this->logger->error('Smarty suggestAddresses exception', [
                 'exception'      => $e,
@@ -174,6 +186,37 @@ final class SmartySuggestAddresses
         }
 
         return $score;
+    }
+
+    private function filterSuggestions(AdressDto $input, array $suggestions): array
+    {
+        $inputCity = $this->norm((string) $input->getCity());
+        $inputZip  = preg_replace('/\D+/', '', (string) $input->getPostalCode());
+
+        $filtered = array_values(array_filter($suggestions, function (array $suggestion) use ($inputCity, $inputZip): bool {
+            $suggestionCity = $this->norm((string) ($suggestion['city'] ?? ''));
+            $suggestionZip  = preg_replace('/\D+/', '', (string) ($suggestion['postalCode'] ?? ''));
+
+            if ($inputCity !== '' && $suggestionCity !== '' && $suggestionCity !== $inputCity) {
+                return false;
+            }
+
+            if ($inputZip !== '' && $suggestionZip !== '') {
+                return substr($suggestionZip, 0, 5) === substr($inputZip, 0, 5);
+            }
+
+            return true;
+        }));
+
+        if ($filtered !== []) {
+            return $filtered;
+        }
+
+        if ($inputZip !== '') {
+            return [];
+        }
+
+        return $suggestions;
     }
 
     private function readInputState(AdressDto $input): string

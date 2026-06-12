@@ -15,10 +15,11 @@ export default class SmartyAddressValidationPlugin extends PluginBaseClass {
         this.geo = new GeoService();
         this.formAdapter = new AddressFormAdapter();
         this.modal = new SuggestionModal();
+        this.streetAutocompletes = new Map();
         this._onSubmit = this._onSubmit.bind(this);
         this._isValidating = false;
         this._toastShown = false;
-        this.el.addEventListener('submit', this._onSubmit);
+        document.addEventListener('submit', this._onSubmit, true);
         this._isModalOpen = false;
 
         const submitBtn = this.el.querySelector('button[type="submit"]');
@@ -32,7 +33,9 @@ export default class SmartyAddressValidationPlugin extends PluginBaseClass {
     }
 
     async _onSubmit(event) {
+        if (event.target !== this.el) return;
         event.preventDefault();
+        event.stopImmediatePropagation();
         if (this._isModalOpen) return;
 
         await this.guard.run(async () => {
@@ -279,7 +282,7 @@ export default class SmartyAddressValidationPlugin extends PluginBaseClass {
 
             const type = streetInput.name?.startsWith('shippingAddress') ? 'shipping' : 'billing';
 
-            new AutocompleteDropdown({
+            const autocomplete = new AutocompleteDropdown({
                 input: streetInput,
                 minChars: 1,
                 debounceMs: 150,
@@ -317,6 +320,8 @@ export default class SmartyAddressValidationPlugin extends PluginBaseClass {
                 dropdownClass: 'smarty-street-suggestions-dropdown',
                 itemClass: 'smarty-street-suggestion-item',
             });
+
+            this.streetAutocompletes.set(type, autocomplete);
         });
     }
 
@@ -358,7 +363,7 @@ export default class SmartyAddressValidationPlugin extends PluginBaseClass {
                     const current = this.formAdapter.readSingleAddress(this.el, type);
 
                     const normalized = {
-                        street: current.street,
+                        street: '',
                         city: s.city || '',
                         postalCode: (s.postalCode || s.zipcode || '').replace(/\D/g, '').slice(0, 5),
                         state: s.state || s.state_abbreviation || '',
@@ -366,6 +371,7 @@ export default class SmartyAddressValidationPlugin extends PluginBaseClass {
                     };
 
                     this.formAdapter.writeAddress(this.el, type, normalized);
+                    this._openStreetSuggestionsFromZip(type, normalized);
                 },
 
                 wrapperClass: 'smarty-suggestions-wrapper',
@@ -373,6 +379,44 @@ export default class SmartyAddressValidationPlugin extends PluginBaseClass {
                 itemClass: 'smarty-suggestion-item',
             });
         });
+    }
+
+    async _openStreetSuggestionsFromZip(type, zipSelection) {
+        const autocomplete = this.streetAutocompletes.get(type);
+        if (!autocomplete?.input) return;
+
+        let suggestions = [];
+        const selectedZip = (zipSelection.postalCode || '').replace(/\D/g, '').slice(0, 5);
+
+        try {
+            const { ok, json } = await this.api.suggest({
+                street: zipSelection.city || zipSelection.postalCode || '',
+                city: zipSelection.city || '',
+                postalCode: zipSelection.postalCode || '',
+                countryIso: (zipSelection.countryIso || 'US').toUpperCase(),
+            });
+
+            const list = json?.data?.suggestions;
+            suggestions = ok && Array.isArray(list) ? list : [];
+        } catch (e) {
+            console.error('[Smarty] follow-up street suggest failed', e);
+            return;
+        }
+
+        if (selectedZip) {
+            suggestions = suggestions.filter((suggestion) => {
+                const suggestionZip = (suggestion.postalCode || suggestion.zipcode || '')
+                    .replace(/\D/g, '')
+                    .slice(0, 5);
+
+                return suggestionZip === selectedZip;
+            });
+        }
+
+        if (!suggestions.length) return;
+
+        autocomplete.input.focus();
+        autocomplete.renderSuggestions(suggestions);
     }
 
     _setupCoordinateLookup() {
@@ -419,9 +463,14 @@ export default class SmartyAddressValidationPlugin extends PluginBaseClass {
     }
 
     _finishAndSubmit(form, btn) {
-        this.el.removeEventListener('submit', this._onSubmit);
+        document.removeEventListener('submit', this._onSubmit, true);
         this._resetSubmitButton(btn);
-        form.submit();
+
+        if (typeof form.requestSubmit === 'function') {
+            form.requestSubmit();
+        } else {
+            form.submit();
+        }
     }
 
     _resetSubmitButton(btn) {

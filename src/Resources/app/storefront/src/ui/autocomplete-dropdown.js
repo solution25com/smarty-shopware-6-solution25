@@ -47,6 +47,16 @@ export default class AutocompleteDropdown {
         if (this.dropdown) this.dropdown.style.display = 'block';
     }
 
+    renderSuggestions(items) {
+        if (!Array.isArray(items) || !items.length) {
+            this.hide();
+            return;
+        }
+
+        this._render(items);
+        this.show();
+    }
+
     async _onInput() {
         const raw = (this.input.value || '').trim();
         const query = this.transformQuery(raw);
