@@ -4,9 +4,9 @@ use Shopware\Core\TestBootstrapper;
 
 $loader = (new TestBootstrapper())
     ->addCallingPlugin()
-    ->addActivePlugins('SmartyIntegration')
+    ->addActivePlugins('SmartyAddressValidation')
     ->setForceInstallPlugins(true)
     ->bootstrap()
     ->getClassLoader();
 
-$loader->addPsr4('SmartyIntegration\\Tests\\', __DIR__);
+$loader->addPsr4('SmartyAddressValidation\\Tests\\', __DIR__);

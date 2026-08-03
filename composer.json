@@ -1,55 +1,49 @@
 {
-  "name": "smarty-integration/smarty-integration",
-  "description": "Smarty Integration validates and standardizes US addresses in Shopware 6 using Smarty APIs. It auto-fills city and ZIP and blocks invalid addresses during registration and checkout.",
-  "type": "shopware-platform-plugin",
-  "version": "1.0.0",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "SmartyIntegration",
-      "homepage": "https://smartyintegration.com",
-      "role": "Developer"
-    }
-  ],
-  "require": {
-    "shopware/core": "~6.7.0",
-    "shopware/storefront": "~6.7.0"
-  },
-  "extra": {
-    "shopware-plugin-class": "SmartyIntegration\\SmartyIntegration",
-    "label": {
-      "de-DE": "Smarty Integration – Adressvalidierung",
-      "en-GB": "Smarty Integration – Address Validation"
+    "name": "smarty-address-validation/smarty-address-validation",
+    "description": "Smarty Address Validation plugin for Shopware 6 integrates the Smarty Streets API to validate and standardize customer addresses at checkout, reducing failed deliveries.",
+    "type": "shopware-platform-plugin",
+    "version": "1.0.0",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Solution25",
+            "email": "info@solution25.com"
+        }
+    ],
+    "require": {
+        "shopware/core": "~6.7.0",
+        "shopware/storefront": "~6.7.0"
     },
-    "description": {
-      "en-GB": "Smarty Integration validates and standardizes US addresses in Shopware 6 using Smarty APIs. It auto-fills city and ZIP and blocks invalid addresses during registration and checkout.",
-      "de-DE": "Smarty Integration prüft und standardisiert Adressen in Shopware 6 mit Smarty APIs. Es ergänzt Stadt und Postleitzahl und verhindert ungültige Adressen beim Registrieren und Bezahlen."
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^4.0"
     },
-    "manufacturerLink": {
-      "en-GB": "https://smartyintegration.com",
-      "de-DE": "https://smartyintegration.com"
+    "extra": {
+        "shopware-plugin-class": "SmartyAddressValidation\\SmartyAddressValidation",
+        "label": {
+            "de-DE": "Smarty Adressvalidierung",
+            "en-GB": "Smarty Address Validation"
+        },
+        "description": {
+            "en-GB": "Smarty Address Validation for Shopware 6 integrates the SmartyStreets API to validate customer shipping addresses at checkout, reducing failed deliveries and improving accuracy.",
+            "de-DE": "Smarty Adressvalidierung für Shopware 6 nutzt die SmartyStreets-API, um Kundenadressen beim Checkout zu prüfen und zu standardisieren – für weniger Lieferfehler."
+        },
+        "manufacturerLink": {
+            "en-GB": "https://www.solution25.com",
+            "de-DE": "https://www.solution25.com"
+        },
+        "supportLink": {
+            "en-GB": "https://www.solution25.com/support",
+            "de-DE": "https://www.solution25.com/support"
+        }
     },
-    "supportLink": {
-      "en-GB": "https://smartyintegration.com/support",
-      "de-DE": "https://smartyintegration.com/support"
+    "autoload": {
+        "psr-4": {
+            "SmartyAddressValidation\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SmartyAddressValidation\\Tests\\": "tests/"
+        }
     }
-  },
-  "autoload": {
-    "psr-4": {
-      "SmartyIntegration\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "SmartyIntegration\\Tests\\": "tests/"
-    }
-  },
-  "require-dev": {
-    "squizlabs/php_codesniffer": "^4.0"
-  },
-  "config": {
-    "allow-plugins": {
-      "symfony/runtime": false
-    }
-  }
 }

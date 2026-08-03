@@ -1,22 +1,16 @@
-import SmartyAddressValidationPlugin from './plugin/smarty-address-validation.plugin';
-import SmartyCheckoutConfirmValidationPlugin from './plugin/smarty-checkout-confirm-validation.plugin';
+import SmartyAddressValidationPlugin from './smarty-address-validation.plugin.js';
+import SmartyAddressAutocompletePlugin from './plugin/smarty-address-autocomplete.plugin.js';
 
 const PluginManager = window.PluginManager;
 
 PluginManager.register(
     'SmartyAddressValidation',
     SmartyAddressValidationPlugin,
-    'form[action*="/account/register"]'
+    '[data-smarty-address-validation]'
 );
 
 PluginManager.register(
-    'SmartyAddressValidationAddressEdit',
-    SmartyAddressValidationPlugin,
-    'form[action*="/account/address"]'
+    'SmartyAddressAutocomplete',
+    SmartyAddressAutocompletePlugin,
+    '[data-smarty-address-autocomplete]'
 );
-PluginManager.register(
-    'SmartyCheckoutConfirmValidation',
-    SmartyCheckoutConfirmValidationPlugin,
-    '#confirmOrderForm'
-);
-

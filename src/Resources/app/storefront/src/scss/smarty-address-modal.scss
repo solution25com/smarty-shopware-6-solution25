@@ -1,0 +1,316 @@
+.smarty-address-modal-open {
+    overflow: hidden;
+}
+
+.smarty-address-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1050;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 24px 16px;
+}
+
+.smarty-address-modal__backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.58);
+}
+
+.smarty-address-modal__dialog {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 460px);
+    max-height: calc(100vh - 48px);
+    overflow: auto;
+    margin: auto;
+    padding: 34px 26px 28px;
+    background: #fff;
+    border-radius: 3px;
+    box-shadow: 0 22px 60px rgba(0, 0, 0, 0.28);
+    transition: width 0.22s ease, transform 0.22s ease, opacity 0.22s ease;
+}
+
+.smarty-address-modal__content {
+    min-height: 210px;
+    transition: opacity 0.14s ease, transform 0.14s ease;
+}
+
+.smarty-address-modal__content.is-transitioning {
+    opacity: 0;
+    transform: translateY(12px);
+}
+
+.smarty-address-modal--editing .smarty-address-modal__dialog {
+    width: min(100%, 625px);
+    padding: 30px 26px 28px;
+}
+
+.smarty-address-modal__edit-form .account-content-aside,
+.smarty-address-modal__edit-form .account-address-back {
+    display: none;
+}
+
+.smarty-address-modal__edit-form .account-address,
+.smarty-address-modal__edit-form .card,
+.smarty-address-modal__edit-form .card-body {
+    border: 0;
+    box-shadow: none;
+}
+
+.smarty-address-modal__edit-form .account-welcome {
+    margin-top: 0;
+}
+
+.smarty-address-modal__edit-form .smarty-address-editor__title,
+.smarty-address-modal__edit-form .account-welcome {
+    margin-bottom: 18px;
+    font-size: 24px;
+    line-height: 1.15;
+    letter-spacing: -0.18px;
+}
+
+.smarty-address-modal__edit-form .smarty-address-editor__form {
+    gap: 18px;
+}
+
+.smarty-address-modal__edit-form .smarty-address-editor__section {
+    gap: 10px;
+}
+
+.smarty-address-modal__edit-form .smarty-address-editor__section-title {
+    font-size: 18px;
+    line-height: 1.2;
+    letter-spacing: -0.12px;
+}
+
+.smarty-address-modal__edit-form .smarty-address-editor__layout,
+.smarty-address-modal__edit-form .smarty-address-editor__row {
+    gap: 12px;
+}
+
+.smarty-address-modal__edit-form .smarty-address-editor__field .form-control,
+.smarty-address-modal__edit-form .smarty-address-editor__field .form-select,
+.smarty-address-modal__edit-form .smarty-address-editor__row--city-zip > .form-group .form-control,
+.smarty-address-modal__edit-form .smarty-address-editor__row--city-zip > .form-group .form-select {
+    min-height: 48px;
+    padding: 9px 12px;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.smarty-address-modal__edit-form .smarty-address-editor__field .phone-number {
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.smarty-address-modal__edit-form .smarty-address-editor__submit {
+    min-height: 42px;
+    padding: 10px 18px;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: -0.22px;
+}
+
+.smarty-address-modal__close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #222;
+    font-size: 30px;
+    line-height: 28px;
+    cursor: pointer;
+}
+
+.smarty-address-modal h2 {
+    margin: 0 34px 18px 0;
+    color: #202020;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.18;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+}
+
+.smarty-address-modal__description {
+    margin: 0 0 24px;
+    color: #555;
+    font-size: 15px;
+    line-height: 1.45;
+}
+
+.smarty-address-modal__section {
+    margin-bottom: 22px;
+}
+
+.smarty-address-modal__section h3 {
+    margin: 0 0 10px;
+    color: #222;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.smarty-address-modal__address {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0;
+    padding: 14px 16px;
+    background: #f8f8f8;
+    border: 1px solid #d7d7d7;
+    color: #222;
+    font-size: 15px;
+    font-style: normal;
+    line-height: 1.4;
+}
+
+.smarty-address-modal__suggestion {
+    display: block;
+    width: 100%;
+    margin: 0 0 10px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+}
+
+.smarty-address-modal__suggestion .smarty-address-modal__address {
+    background: #fff;
+    border: 2px solid #222;
+    transition: box-shadow 0.16s ease, transform 0.16s ease;
+}
+
+.smarty-address-modal__suggestion:hover .smarty-address-modal__address {
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+    transform: translateY(-1px);
+}
+
+.smarty-address-modal__footer {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+    margin-top: 24px;
+}
+
+.smarty-address-modal__button {
+    flex: 1 1 0;
+    min-height: 44px;
+    padding: 11px 14px;
+    border-radius: 0;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.smarty-address-modal__button--primary {
+    border: 1px solid #202020;
+    background: #202020;
+    color: #fff;
+}
+
+.smarty-address-modal__button--secondary {
+    border: 1px solid #202020;
+    background: #fff;
+    color: #202020;
+}
+
+.smarty-address-modal__button:hover {
+    opacity: 0.88;
+}
+
+.smarty-address-modal__close:focus,
+.smarty-address-modal__button:focus,
+.smarty-address-modal__suggestion:focus {
+    outline: none;
+}
+
+.smarty-address-modal__close:focus-visible,
+.smarty-address-modal__button:focus-visible,
+.smarty-address-modal__suggestion:focus-visible .smarty-address-modal__address {
+    box-shadow: 0 0 0 3px rgba(32, 32, 32, 0.22);
+}
+
+.smarty-address-modal__loader {
+    display: flex;
+    min-height: 145px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+    text-align: center;
+}
+
+.smarty-address-modal__spinner {
+    width: 38px;
+    height: 38px;
+    margin-bottom: 14px;
+    border: 3px solid #ddd;
+    border-top-color: #202020;
+    border-radius: 50%;
+    animation: smarty-address-spin 0.8s linear infinite;
+}
+
+.smarty-address-modal__notice,
+.smarty-address-modal__error {
+    margin: 0 0 18px;
+    padding: 12px 14px;
+    background: #fff4f4;
+    border: 1px solid #e4b5b5;
+    color: #8a1f1f;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.smarty-address-modal__muted {
+    margin: 0;
+    color: #777;
+    font-size: 14px;
+}
+
+.smarty-address-modal.is-busy {
+    cursor: wait;
+}
+
+.smarty-address-modal.is-busy button {
+    cursor: wait;
+    opacity: 0.65;
+}
+
+@keyframes smarty-address-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 480px) {
+    .smarty-address-modal {
+        padding: 14px;
+    }
+
+    .smarty-address-modal__dialog {
+        padding: 30px 18px 22px;
+    }
+
+    .smarty-address-modal h2 {
+        font-size: 19px;
+    }
+
+    .smarty-address-modal__footer {
+        flex-direction: column;
+    }
+
+    .smarty-address-modal__button {
+        width: 100%;
+    }
+}

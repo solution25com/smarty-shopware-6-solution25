@@ -1,7 +1,11 @@
 {
-  "sw-settings": {
-    "index": {
-      "tabCurbstone": "Smarty Plugin"
+    "smarty-address": {
+      "general": {
+        "mainMenuItemGeneral": "Smarty Address Validation",
+        "description": "Adressen mit Smarty validieren und korrigieren."
+      },
+      "autocomplete": {
+        "loading": "Vorschläge werden geladen…"
+      }
     }
   }
-}

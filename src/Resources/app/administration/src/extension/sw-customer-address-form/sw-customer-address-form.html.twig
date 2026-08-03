@@ -1,0 +1,57 @@
+{% block sw_customer_address_form_street_field %}
+<div class="smarty-ac-wrap">
+    {% parent %}
+
+    <div
+        v-if="smartyStreetLoading || smartyStreetSuggestions.length"
+        class="smarty-ac-dropdown"
+    >
+        <div
+            v-if="smartyStreetLoading"
+            class="smarty-ac-dropdown__status"
+        >
+            {{ $tc('smarty-address.autocomplete.loading') }}
+        </div>
+
+        <button
+            v-for="(suggestion, index) in smartyStreetSuggestions"
+            v-else
+            :key="`smarty-street-${index}`"
+            type="button"
+            class="smarty-ac-dropdown__item"
+            @mousedown.prevent="applySmartySuggestion(suggestion)"
+        >
+            {{ suggestion.label }}
+        </button>
+    </div>
+</div>
+{% endblock %}
+
+{% block sw_customer_address_form_zipcode_field %}
+<div class="smarty-ac-wrap">
+    {% parent %}
+
+    <div
+        v-if="smartyZipLoading || smartyZipSuggestions.length"
+        class="smarty-ac-dropdown"
+    >
+        <div
+            v-if="smartyZipLoading"
+            class="smarty-ac-dropdown__status"
+        >
+            {{ $tc('smarty-address.autocomplete.loading') }}
+        </div>
+
+        <button
+            v-for="(suggestion, index) in smartyZipSuggestions"
+            v-else
+            :key="`smarty-zip-${index}`"
+            type="button"
+            class="smarty-ac-dropdown__item"
+            @mousedown.prevent="applySmartySuggestion(suggestion)"
+        >
+            {{ suggestion.label }}
+        </button>
+    </div>
+</div>
+{% endblock %}

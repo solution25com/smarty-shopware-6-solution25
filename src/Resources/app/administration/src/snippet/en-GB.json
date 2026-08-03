@@ -1,7 +1,11 @@
 {
-  "sw-settings": {
-    "index": {
-      "tabSmarty": "Smarty Plugin"
+    "smarty-address": {
+      "general": {
+        "mainMenuItemGeneral": "Smarty Address Validation",
+        "description": "Validate and correct customer and order addresses with Smarty."
+      },
+      "autocomplete": {
+        "loading": "Loading suggestions…"
+      }
     }
   }
-}

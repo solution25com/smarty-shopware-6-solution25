@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/trunk/src/Core/System/SystemConfig/Schema/config.xsd">
+
+    <card>
+        <title>Validation Features</title>
+        <title lang="de-DE">Validierungsfunktionen</title>
+
+        <input-field type="bool">
+            <name>enableStorefrontValidation</name>
+            <label>Enable storefront validation</label>
+            <defaultValue>true</defaultValue>
+            <helpText>Enables backend-powered address validation for storefront address flows.</helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>enableAdminValidation</name>
+            <label>Enable admin validation</label>
+            <defaultValue>true</defaultValue>
+            <helpText>Allows administrators to validate addresses from the Administration in later steps.</helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>enableAutomaticStandardization</name>
+            <label>Enable automatic standardization</label>
+            <defaultValue>false</defaultValue>
+            <helpText>Allows standardized Smarty address data to be applied after explicit confirmation.</helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>enableGeocoding</name>
+            <label>Enable geocoding</label>
+            <defaultValue>true</defaultValue>
+            <helpText>Stores latitude and longitude returned by Smarty when available.</helpText>
+        </input-field>
+
+        <input-field type="bool">
+            <name>enableLogging</name>
+            <label>Enable logging</label>
+            <defaultValue>false</defaultValue>
+            <helpText>Logs backend validation activity without exposing credentials.</helpText>
+        </input-field>
+    </card>
+
+    <card>
+        <title>Smarty Credentials</title>
+        <title lang="de-DE">Smarty Zugangsdaten</title>
+
+        <input-field type="single-select">
+            <name>smartyEnvironment</name>
+            <label>Smarty environment</label>
+            <defaultValue>test</defaultValue>
+            <options>
+                <option>
+                    <id>test</id>
+                    <name>Test</name>
+                </option>
+                <option>
+                    <id>live</id>
+                    <name>Live</name>
+                </option>
+            </options>
+        </input-field>
+
+        <input-field type="text">
+            <name>smartyAuthId</name>
+            <label>Smarty Auth ID</label>
+            <placeholder>Auth ID</placeholder>
+            <helpText>Backend-only credential. Never expose this value to storefront JavaScript.</helpText>
+        </input-field>
+
+        <input-field type="text">
+            <name>smartyWebsiteKey</name>
+            <label>Smarty Website Key</label>
+            <placeholder>Website key</placeholder>
+            <helpText>Optional alternative key. Backend services decide how it is used.</helpText>
+        </input-field>
+
+        <input-field type="password">
+            <name>smartyAuthToken</name>
+            <label>Smarty Auth Token</label>
+            <placeholder>Auth token</placeholder>
+            <helpText>Backend-only secret. Never expose this value to storefront JavaScript.</helpText>
+        </input-field>
+    </card>
+
+    <card>
+        <title>Validation Rules</title>
+        <title lang="de-DE">Validierungsregeln</title>
+
+        <input-field type="int">
+            <name>validationAgeThresholdMonths</name>
+            <label>Validation age threshold in months</label>
+            <defaultValue>6</defaultValue>
+            <min>1</min>
+            <max>24</max>
+            <helpText>Addresses older than this threshold should be revalidated in later steps.</helpText>
+        </input-field>
+    </card>
+</config>

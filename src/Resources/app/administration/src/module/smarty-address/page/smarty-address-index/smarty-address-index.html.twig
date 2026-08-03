@@ -1,0 +1,93 @@
+<sw-page class="smarty-address-page">
+    <template #smart-bar-header>
+        <h2>{{ $tc('smarty-address.general.mainMenuItemGeneral') }}</h2>
+    </template>
+
+    <template #content>
+        <sw-card-view>
+            <sw-card title="Address lookup">
+                <sw-select-field
+                    v-model:value="addressType"
+                    label="Address type">
+                    <option value="customer_address">Customer address</option>
+                    <option value="order_address">Order address</option>
+                </sw-select-field>
+
+                <sw-text-field
+                    v-model:value="addressId"
+                    label="Address ID"
+                    placeholder="Paste customer_address or order_address ID">
+                </sw-text-field>
+
+                <sw-button
+                    variant="primary"
+                    :isLoading="loading"
+                    :disabled="!addressId || loading"
+                    @click="validateAddress">
+                    Validate with Smarty
+                </sw-button>
+            </sw-card>
+
+            <sw-alert v-if="error" variant="error" :title="error"></sw-alert>
+            <sw-alert v-if="success" variant="success" :title="success"></sw-alert>
+
+            <sw-card v-if="loading" title="Smarty validation">
+                <sw-loader></sw-loader>
+            </sw-card>
+
+            <sw-card v-if="result && !loading" title="Smarty validation result">
+                <sw-description-list>
+                    <dt>Valid</dt>
+                    <dd>{{ result.isValid ? 'Yes' : 'No' }}</dd>
+
+                    <dt>Message</dt>
+                    <dd>{{ result.message || '-' }}</dd>
+
+                    <dt>Error</dt>
+                    <dd>{{ result.error || '-' }}</dd>
+
+                    <dt>Latitude</dt>
+                    <dd>{{ result.latitude || '-' }}</dd>
+
+                    <dt>Longitude</dt>
+                    <dd>{{ result.longitude || '-' }}</dd>
+                </sw-description-list>
+
+                <h3>Current / original address</h3>
+                <pre>{{ formatJson(result.originalAddress) }}</pre>
+
+                <h3>Standardized address</h3>
+                <pre>{{ formatJson(result.standardizedAddress) }}</pre>
+
+            </sw-card>
+
+            <sw-card v-if="suggestions.length" title="Smarty suggestions">
+                <div
+                    v-for="(suggestion, index) in suggestions"
+                    :key="index"
+                    class="smarty-address-page__suggestion">
+                    <strong>{{ addressLabel(suggestion) }}</strong>
+                    <pre>{{ formatJson(suggestion) }}</pre>
+
+                    <sw-button
+                        variant="primary"
+                        size="small"
+                        :isLoading="actionLoading"
+                        @click="applySuggestion(index)">
+                        Apply this suggestion
+                    </sw-button>
+                </div>
+            </sw-card>
+
+            <sw-card v-if="logs.length" title="Request / response logs">
+                <div
+                    v-for="(log, index) in logs"
+                    :key="index"
+                    class="smarty-address-page__log">
+                    <strong>{{ log.created_at }}</strong>
+                    <pre>{{ formatJson(log) }}</pre>
+                </div>
+            </sw-card>
+        </sw-card-view>
+    </template>
+</sw-page>

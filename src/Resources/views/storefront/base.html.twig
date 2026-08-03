@@ -3,5 +3,22 @@
 {% block base_body_inner %}
     {{ parent() }}
 
-    {% sw_include '@SmartyIntegration/storefront/component/smarty/suggestion-modal.html.twig' %}
+    <div
+        class="smarty-address-validation-host"
+        data-smarty-address-validation
+        data-smarty-address-autocomplete
+        data-smarty-status-url="{{ path('frontend.smarty.address.status') }}"
+        data-smarty-validate-url="{{ path('frontend.smarty.address.validate') }}"
+        data-smarty-use-suggestion-url="{{ path('frontend.smarty.address.use_suggestion') }}"
+        data-smarty-use-original-url="{{ path('frontend.smarty.address.use_original') }}"
+        data-smarty-confirm-valid-url="{{ path('frontend.smarty.address.confirm_valid') }}"
+        data-smarty-autocomplete-zip-url="{{ path('frontend.smarty.address.autocomplete.zip') }}"
+        data-smarty-autocomplete-street-url="{{ path('frontend.smarty.address.autocomplete.street') }}"
+        data-smarty-reverse-geo-url="{{ path('frontend.smarty.address.reverse_geo') }}"
+        data-smarty-debug-enabled="{{ config('SmartyAddressValidation.config.enableLogging') ? 'true' : 'false' }}"
+        data-smarty-edit-url-template="{{ app.request.basePath ~ '/account/address/__ADDRESS_ID__' }}"
+        data-smarty-current-path="{{ app.request.pathInfo }}"
+        data-smarty-current-route="{{ app.request.attributes.get('_route')|default('') }}"
+        hidden>
+    </div>
 {% endblock %}
