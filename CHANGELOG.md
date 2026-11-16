@@ -3,8 +3,7 @@
 ## [2.0.1] - 2026-11-16
 
 - Fixed an uncached request to `/smarty/address/status` on every storefront page load. The address status is now rendered into the page, so visitors and customers with nothing to confirm no longer trigger an extra request.
-- Pages that show a customer's address are no longer stored in the HTTP cache. All other pages stay cacheable.
-
+- Pages that include a customer's address confirmation data are never stored in the HTTP cache. All other pages stay cacheable.
 ## [2.0.0] - 2026-08-03
 
 - Added live address autocomplete as customers type, powered by Smarty's Autocomplete Pro API.
