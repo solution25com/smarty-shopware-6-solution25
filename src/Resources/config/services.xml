@@ -65,6 +65,13 @@
             <argument type="service" id="Doctrine\DBAL\Connection" />
         </service>
 
+        <service id="SmartyAddressValidation\Subscriber\AddressStatusSubscriber">
+            <argument type="service" id="SmartyAddressValidation\Service\AddressConfirmationService" />
+            <argument type="service" id="request_stack" />
+            <argument type="service" id="SmartyAddressValidation.logger" />
+            <tag name="kernel.event_subscriber" />
+        </service>
+
         <service id="SmartyAddressValidation\Subscriber\AddressValidationSubscriber">
             <argument type="service" id="customer_address.repository" />
             <argument type="service" id="order_address.repository" />

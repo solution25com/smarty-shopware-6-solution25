@@ -2,7 +2,7 @@
     "name": "solution25/smarty-address-validation",
     "description": "Smarty Address Validation plugin for Shopware 6 integrates the Smarty Streets API to validate and standardize customer addresses at checkout, reducing failed deliveries.",
     "type": "shopware-platform-plugin",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "license": "MIT",
     "authors": [
         {

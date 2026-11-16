@@ -3,6 +3,8 @@ import SmartyApiService from './service/smarty-api.service';
 import SmartyModalService from './service/smarty-modal.service';
 import SmartyAddressRenderer from './service/smarty-address-renderer';
 
+const PENDING_COOKIE = 'smarty-address-pending';
+
 export default class SmartyAddressValidationPlugin extends Plugin {
     init() {
         this.options = this._readOptions();
@@ -32,10 +34,7 @@ export default class SmartyAddressValidationPlugin extends Plugin {
         this.booted = true;
 
         try {
-            const status = await this.api.getStatus({
-                currentPath: window.location.pathname,
-                currentRoute: this.options.currentRoute,
-            });
+            const status = await this._loadStatus();
 
             if (!status || status.shouldValidate !== true || !status.addressId) {
                 return;
@@ -69,6 +68,35 @@ export default class SmartyAddressValidationPlugin extends Plugin {
         }
     }
 
+    async _loadStatus() {
+        if (this.options.initialStatus) {
+            return this.options.initialStatus;
+        }
+
+        if (this.options.statusEmbedded && !this._hasPendingCookie()) {
+            return null;
+        }
+
+        const status = await this.api.getStatus({
+            currentPath: window.location.pathname,
+            currentRoute: this.options.currentRoute,
+        });
+
+        if (status?.shouldValidate !== true) {
+            this._clearPendingCookie();
+        }
+
+        return status;
+    }
+
+    _hasPendingCookie() {
+        return document.cookie.split(';').some((cookie) => cookie.trim().startsWith(`${PENDING_COOKIE}=`));
+    }
+
+    _clearPendingCookie() {
+        document.cookie = `${PENDING_COOKIE}=; Max-Age=0; Path=/; SameSite=Lax`;
+    }
+
     async _useSuggestion(index, suggestion) {
         if (!this.addressId) {
             return;
@@ -80,6 +108,7 @@ export default class SmartyAddressValidationPlugin extends Plugin {
             const response = await this.api.useSuggestion(this.addressId, index, suggestion);
 
             if (response.success) {
+                this._clearPendingCookie();
                 this.modal.close();
                 window.location.reload();
                 return;
@@ -104,6 +133,7 @@ export default class SmartyAddressValidationPlugin extends Plugin {
             const response = await this.api.useOriginal(this.addressId);
 
             if (response.success) {
+                this._clearPendingCookie();
                 this.modal.close();
                 window.location.reload();
                 return;
@@ -128,6 +158,7 @@ export default class SmartyAddressValidationPlugin extends Plugin {
             const response = await this.api.confirmValid(this.addressId);
 
             if (response.success) {
+                this._clearPendingCookie();
                 this.modal.close();
                 window.location.reload();
                 return;
@@ -298,6 +329,8 @@ export default class SmartyAddressValidationPlugin extends Plugin {
         const dataset = this.el.dataset;
 
         return {
+            initialStatus: dataset.smartyInitialStatus ? JSON.parse(dataset.smartyInitialStatus) : null,
+            statusEmbedded: dataset.smartyStatusEmbedded === 'true',
             statusUrl: dataset.smartyStatusUrl,
             validateUrl: dataset.smartyValidateUrl,
             useSuggestionUrl: dataset.smartyUseSuggestionUrl,

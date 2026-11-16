@@ -243,11 +243,38 @@ class AddressConfirmationService
         ])));
 
         foreach ($ids as $id) {
-            $address = $this->loadOwnedAddress((string) $id, $customer, $context);
+            $address = $this->findLoadedAddress((string) $id, $customer)
+                ?? $this->loadOwnedAddress((string) $id, $customer, $context);
 
             if ($address !== null) {
                 return $address;
             }
+        }
+
+        return null;
+    }
+
+    private function findLoadedAddress(string $addressId, CustomerEntity $customer): ?CustomerAddressEntity
+    {
+        $loaded = [
+            $customer->getActiveShippingAddress(),
+            $customer->getDefaultShippingAddress(),
+            $customer->getActiveBillingAddress(),
+            $customer->getDefaultBillingAddress(),
+        ];
+
+        foreach ($loaded as $address) {
+            if (
+                $address === null
+                || $address->getId() !== $addressId
+                || $address->getCustomerId() !== $customer->getId()
+                || ($address->getCountryId() !== '' && $address->getCountry() === null)
+                || ($address->getCountryStateId() !== null && $address->getCountryState() === null)
+            ) {
+                continue;
+            }
+
+            return $address;
         }
 
         return null;
@@ -453,6 +480,11 @@ class AddressConfirmationService
 
     private function isCheckoutRequest(Request $request): bool
     {
+        if ($request->attributes->get('_route') !== 'frontend.smarty.address.status') {
+            return str_contains((string) $request->attributes->get('_route', ''), 'checkout')
+                || str_contains($request->getPathInfo(), '/checkout');
+        }
+
         $route = (string) (
             $request->query->get('currentRoute')
             ?: $request->headers->get('x-current-route')

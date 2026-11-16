@@ -6,6 +6,10 @@
     <div
         class="smarty-address-validation-host"
         data-smarty-address-validation
+        data-smarty-status-embedded="true"
+        {% if smartyAddressStatus.shouldValidate|default(false) %}
+            data-smarty-initial-status="{{ smartyAddressStatus|json_encode|escape('html_attr') }}"
+        {% endif %}
         data-smarty-address-autocomplete
         data-smarty-status-url="{{ path('frontend.smarty.address.status') }}"
         data-smarty-validate-url="{{ path('frontend.smarty.address.validate') }}"
